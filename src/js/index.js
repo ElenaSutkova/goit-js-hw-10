@@ -54,12 +54,16 @@ function onSelect(evt) {
 
     fetchCatByBreed(breedId)
         .then(catData => {
+         if(catData.length === 0){
+         return  Notify.info("I'm sorry, this is a free backend and this cat was not found for your request!");
+       }
+         
             catInfoCard.style.display = 'flex';
             catInfoCard.innerHTML = createCatCardMarkup(catData);
         })
         .catch((err) => {
             catInfoCard.style.display = 'none';
-            console.error(err);
+            // console.error(err);
             Notify.failure('Oops! Something went wrong! Try reloading the page!');
         })
         .finally(_ => loader.style.display = 'none');
@@ -67,11 +71,10 @@ function onSelect(evt) {
 
 function createCatCardMarkup(catData) {
     
-    const {
-        url,
-        breeds
-    } = catData[0];
+    const { url, breeds } = catData[0];
     const { name, description, temperament } = breeds[0];
+
+   
 
     return `
       <img class="cat-img" src="${url}" alt="${name}" width="450" >
